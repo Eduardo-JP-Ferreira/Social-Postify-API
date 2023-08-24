@@ -18,6 +18,15 @@ export class MediaRepository{
     return this.prisma.media.findFirst({ where: { id } });
   }
 
+  findSpecificMedia(createMediaDto: CreateMediaDto) {
+    return this.prisma.media.findFirst({ 
+      where: { 
+        title: createMediaDto.title,
+        username: createMediaDto.username
+      }
+    });
+  }
+
   updateMedia(createMediaDto: CreateMediaDto, id: number){
     return this.prisma.media.update({ where: { id }, data: createMediaDto})
   }

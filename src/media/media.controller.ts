@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, HttpException, HttpStatus } from '@nestjs/common';
 import { MediaService } from './media.service';
 import { CreateMediaDto } from './dto/create-media.dto';
 
@@ -8,26 +8,51 @@ export class MediaController {
 
   @Post()
   createMedia(@Body() createMediaDto: CreateMediaDto) {
-    return this.mediaService.createMedia(createMediaDto);
+    try {
+      return this.mediaService.createMedia(createMediaDto);
+    } catch (error) {
+      console.log(error)
+      console.log(error.response)
+      if(error.response === 'CONFLICT') throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
+      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get()
-  findAllMedias() {
-    return this.mediaService.findAllMedias();
+  findAllMedias() {    
+    try {
+      return this.mediaService.findAllMedias();
+    } catch (error) {
+      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get(':id')
-  findOneMedia(@Param('id') id: string) {
-    return this.mediaService.findOneMedia(+id);
+  findOneMedia(@Param('id') id: string) {   
+    try {
+      return this.mediaService.findOneMedia(+id);
+    } catch (error) {
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 
   @Put(':id')
-  updateMedia(@Body() createMediaDto: CreateMediaDto, @Param('id') id: string) {
-    return this.mediaService.updateMedia(createMediaDto, +id)
+  updateMedia(@Body() createMediaDto: CreateMediaDto, @Param('id') id: string) {    
+    try {
+      return this.mediaService.updateMedia(createMediaDto, +id);
+    } catch (error) {
+      if(error.response === 'CONFLICT') throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 
   @Delete(':id')
-  removeMedia(@Param('id') id: string) {
-    return this.mediaService.removeMedia(+id);
+  removeMedia(@Param('id') id: string) {    
+    try {
+      return this.mediaService.removeMedia(+id);
+    } catch (error) {
+      if(error.response === 'FORBIDDEN') throw new HttpException("CONFLICT", HttpStatus.FORBIDDEN)
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 }
