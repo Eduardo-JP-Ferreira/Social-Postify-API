@@ -1,33 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { MediaService } from './media.service';
 import { CreateMediaDto } from './dto/create-media.dto';
 
-@Controller('media')
+@Controller('medias')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Post()
-  create(@Body() createMediaDto: CreateMediaDto) {
-    return this.mediaService.create(createMediaDto);
+  createMedia(@Body() createMediaDto: CreateMediaDto) {
+    return this.mediaService.createMedia(createMediaDto);
   }
 
   @Get()
-  findAll() {
-    return this.mediaService.findAll();
+  findAllMedias() {
+    return this.mediaService.findAllMedias();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mediaService.findOne(+id);
+  findOneMedia(@Param('id') id: string) {
+    return this.mediaService.findOneMedia(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateMediaDto: UpdateMediaDto) {
-  //   return this.mediaService.update(+id, updateMediaDto);
-  // }
+  @Put(':id')
+  updateMedia(@Body() createMediaDto: CreateMediaDto, @Param('id') id: string) {
+    return this.mediaService.updateMedia(createMediaDto, +id)
+  }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mediaService.remove(+id);
+  removeMedia(@Param('id') id: string) {
+    return this.mediaService.removeMedia(+id);
   }
 }
