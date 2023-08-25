@@ -6,5 +6,6 @@ import { PublicationRepository } from './publications.repository';
 @Module({
   controllers: [PublicationsController],
   providers: [PublicationsService, PublicationRepository],
+  exports: [PublicationsService]
 })
 export class PublicationsModule {}

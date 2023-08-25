@@ -48,7 +48,7 @@ export class PublicationRepository{
 
   findAllAfterDate(after: Date) {
     const afterDate = new Date(after);
-    
+
     return this.prisma.publications.findMany({       
       where: {
         date: {
@@ -57,15 +57,28 @@ export class PublicationRepository{
   }
 
   findOnePublication(id: number) {
-    // return this.prisma.post.findFirst({ where: { id } });
-    return this.prisma.post.findFirst({ where: { id } })
+    return this.prisma.publications.findFirst({ where: { id } })
+  }
+
+  findOnePublicationByPostId(postId: number){
+    return this.prisma.publications.findFirst({ where: { postId } })
+  }
+
+  findOneNotPublishedYetPublication(id: number){
+    const currentDate = new Date();
+    return this.prisma.publications.findMany({ 
+      where: { 
+        id,
+        date: {
+          gt: currentDate.toISOString() 
+    }}});
   }
 
   updatePublication(createPublicationDto: CreatePublicationDto, id: number) {
-    return this.prisma.post.update({ where: { id }, data: createPublicationDto})
+    return this.prisma.publications.update({ where: { id }, data: createPublicationDto})
   }
 
   removePublication(id: number) {
-    return this.prisma.post.delete({ where: { id } });
+    return this.prisma.publications.delete({ where: { id } });
   }
 }

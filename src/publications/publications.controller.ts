@@ -39,7 +39,7 @@ export class PublicationsController {
     try {
       return this.publicationsService.updatePublication(+id, createPublicationDto);
     } catch (error) {
-      if(error.response === 'CONFLICT') throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
+      if(error.response === 'FORBIDDEN') throw new HttpException("FORBIDDEN", HttpStatus.FORBIDDEN)
       throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
     }
   }
