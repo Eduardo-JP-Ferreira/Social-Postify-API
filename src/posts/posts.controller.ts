@@ -12,7 +12,7 @@ export class PostsController {
     try {
       return this.postsService.createPost(createPostDto);
     } catch (error) {
-      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
     }
   }
 
@@ -21,7 +21,7 @@ export class PostsController {
     try {
       return this.postsService.findAllPosts();
     } catch (error) {
-      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
     }
   }
 

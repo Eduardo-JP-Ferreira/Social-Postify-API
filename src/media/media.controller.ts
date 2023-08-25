@@ -11,10 +11,8 @@ export class MediaController {
     try {
       return this.mediaService.createMedia(createMediaDto);
     } catch (error) {
-      console.log(error)
-      console.log(error.response)
       if(error.response === 'CONFLICT') throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
-      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
     }
   }
 
@@ -23,7 +21,7 @@ export class MediaController {
     try {
       return this.mediaService.findAllMedias();
     } catch (error) {
-      throw new HttpException("Error!", HttpStatus.BAD_REQUEST)
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
     }
   }
 

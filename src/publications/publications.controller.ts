@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Put, Query } from '@nestjs/common';
 import { PublicationsService } from './publications.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
@@ -8,27 +8,48 @@ export class PublicationsController {
   constructor(private readonly publicationsService: PublicationsService) {}
 
   @Post()
-  create(@Body() createPublicationDto: CreatePublicationDto) {
-    return this.publicationsService.create(createPublicationDto);
+  createPublication(@Body() createPublicationDto: CreatePublicationDto) {
+    try {
+      return this.publicationsService.createPublication(createPublicationDto);
+    } catch (error) {
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get()
-  findAll() {
-    return this.publicationsService.findAll();
+  findAllPublications(@Query('published') published : boolean | undefined, @Query('after') after: Date | undefined) {
+    try {
+      return this.publicationsService.findAllPublications(published, after);
+    } catch (error) {
+      throw new HttpException("BAD_REQUEST", HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publicationsService.findOne(+id);
+  findOnePublication(@Param('id') id: string) {
+    try {
+      return this.publicationsService.findOnePublication(+id);
+    } catch (error) {
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePublicationDto: UpdatePublicationDto) {
-    return this.publicationsService.update(+id, updatePublicationDto);
+  @Put(':id')
+  updateMedia(@Body() createPublicationDto: CreatePublicationDto, @Param('id') id: string) {   
+    try {
+      return this.publicationsService.updatePublication(+id, createPublicationDto);
+    } catch (error) {
+      if(error.response === 'CONFLICT') throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.publicationsService.remove(+id);
+  removePublication(@Param('id') id: string) {
+    try {
+      return this.publicationsService.removePublication(+id);
+    } catch (error) {
+      throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND)
+    }
   }
 }
