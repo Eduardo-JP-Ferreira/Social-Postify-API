@@ -12,7 +12,6 @@ export class PublicationRepository{
 
   findAllPublication() {
     return this.prisma.publications.findMany({});
-    
   }
   
   findAllPublishedOrNotPublication(published: boolean) {

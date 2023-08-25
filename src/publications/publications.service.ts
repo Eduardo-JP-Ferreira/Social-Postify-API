@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePublicationDto } from './dto/create-publication.dto';
-import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { PublicationRepository } from './publications.repository';
 
 @Injectable()
@@ -25,11 +24,9 @@ export class PublicationsService {
   }
 
   async findOnePublicationByPostId(postId: number) {
-    console.log('pub')
     const publication = await this.publicationRepository.findOnePublicationByPostId(postId);
-    console.log('publicação', publication)
     if(publication) throw new HttpException("FORBIDDEN", HttpStatus.FORBIDDEN)
-    console.log('return')
+
     return
   }
 

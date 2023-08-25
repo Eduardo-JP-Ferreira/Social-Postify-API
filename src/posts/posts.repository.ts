@@ -11,7 +11,6 @@ export class PostRepository{
   }
 
   findAllPosts() {
-    // return this.prisma.post.findMany({});
     return this.prisma.post.findMany({}).then((results) => {
         return results.map((post) => {
           const { id, title, text, image } = post;
@@ -27,7 +26,6 @@ export class PostRepository{
   }
 
   findOnePost(id: number) {
-    // return this.prisma.post.findFirst({ where: { id } });
     return this.prisma.post.findFirst({ where: { id } }).then((post) => {
         if (!post) {
             return null;

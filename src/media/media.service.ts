@@ -7,7 +7,6 @@ export class MediaService {
   constructor(private readonly mediaRepository: MediaRepository) {}
 
   async createMedia(createMediaDto: CreateMediaDto) {
-    // if(createMediaDto.title === 'Opa') throw new HttpException("UNAUTHORIZED", HttpStatus.UNAUTHORIZED)
     const media = await this.mediaRepository.findSpecificMedia(createMediaDto);
     if(media) throw new HttpException("CONFLICT", HttpStatus.CONFLICT)
 
