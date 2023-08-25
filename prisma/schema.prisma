@@ -8,29 +8,31 @@ datasource db {
 }
 
 model Media {
-  id       Int      @id @default(autoincrement())
-  title    String
-  username String
+  id           Int            @id @default(autoincrement())
+  title        String
+  username     String
   publications Publications[]
+
   @@map("media")
 }
 
 model Post {
-  id    Int      @id @default(autoincrement())
-  title String
-  text  String
-  image String?
+  id           Int            @id @default(autoincrement())
+  title        String
+  text         String
+  image        String?
   publications Publications[]
+
   @@map("posts")
 }
 
 model Publications {
   id      Int      @id @default(autoincrement())
-  media   Media    @relation(fields: [mediaId], references: [id])
-  post    Post     @relation(fields: [postId], references: [id])
   mediaId Int
   postId  Int
   date    DateTime
+  media   Media    @relation(fields: [mediaId], references: [id])
+  post    Post     @relation(fields: [postId], references: [id])
 
-  @@map(name: "publications")
+  @@map("publications")
 }
