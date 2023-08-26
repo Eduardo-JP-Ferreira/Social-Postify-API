@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostRepository } from './posts.repository';
-import { PublicationsService } from 'src/publications/publications.service';
+import { PublicationsService } from '../publications/publications.service';
 
 @Injectable()
 export class PostsService {
