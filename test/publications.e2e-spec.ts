@@ -118,7 +118,7 @@ describe('Publications Tests', () => {
     })
     let post2 = await prisma.post.create({
       data: {
-        title: "Why you should have a guinea pig?",
+        title: "Why you should pig?",
         text: "https://www.guineapigs.com/why-you-should-guinea", 
       }
     })
@@ -136,17 +136,19 @@ describe('Publications Tests', () => {
       }
     })
 
-    await request(app.getHttpServer()).put(`/publications/${publicationCreated.id}`).send({      
-      data: {
+    const response = await request(app.getHttpServer())
+    .put(`/publications/${publicationCreated.id}`)
+    .send({      
         mediaId: media.id,
         postId: post2.id,
-        date: "2033-11-22T13:25:17.352Z" 
-      }     
-    });
-    expect(HttpStatus.CREATED);
+        date: "2033-10-21T13:25:17.352Z"    
+    });     
+    expect(response.status).toBe(HttpStatus.OK);
 
     const publications = await prisma.publications.findFirst({ where: { id: publicationCreated.id }})
     expect(publications).not.toBe(null)
+    expect(publications.mediaId).toBe(media.id);
+    expect(publications.postId).toBe(post2.id);
   });
 
   it('/ (delete publications) should update a publications"', async () => {

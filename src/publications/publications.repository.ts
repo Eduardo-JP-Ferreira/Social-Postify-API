@@ -55,6 +55,10 @@ export class PublicationRepository{
     }}});
   }
 
+  findOnePost(id: number) {
+    return this.prisma.post.findFirst({ where: { id } })
+  }
+
   findOnePublication(id: number) {
     return this.prisma.publications.findFirst({ where: { id } })
   }

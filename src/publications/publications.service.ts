@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { PublicationRepository } from './publications.repository';
+import { MediaService } from '../media/media.service';
 
 @Injectable()
 export class PublicationsService {
-  constructor(private readonly publicationRepository: PublicationRepository) {}
+  constructor(private readonly publicationRepository: PublicationRepository, private readonly mediaService: MediaService) {}
 
   async createPublication(createPublicationDto: CreatePublicationDto) {
     return await this.publicationRepository.createPublication(createPublicationDto);
@@ -36,9 +37,10 @@ export class PublicationsService {
     const checkPublishment = await this.publicationRepository.findOneNotPublishedYetPublication(id)
     if(!checkPublishment[0]) throw new HttpException("FORBIDDEN", HttpStatus.FORBIDDEN)
 
-    if(checkPublishment[0].mediaId !== createPublicationDto.mediaId ||
-      checkPublishment[0].postId !== createPublicationDto.postId
-      ) throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND);
+    const checkMedia = await this.mediaService.findOneMedia(createPublicationDto.mediaId)
+    const checkPost = await this.publicationRepository.findOnePost(createPublicationDto.postId)
+
+    if(!checkMedia || !checkPost) throw new HttpException("NOT FOUND", HttpStatus.NOT_FOUND);
 
     return await this.publicationRepository.updatePublication(createPublicationDto, id)
   }
